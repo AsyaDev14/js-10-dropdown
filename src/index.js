@@ -1,53 +1,59 @@
-import axios from "axios";
-
-const myKey = "live_6QNnfCdmuLjGVZOWf2Gr5m67HTlIOKFHdsHSXDUc0PUip8i04nZJQqeUpzPcvlj0";
-const BASE_URL = 'https://api.thecatapi.com/v1';
-axios.defaults.headers.common["x-api-key"] = myKey;
+import { fetchBreeds, fetchCatByBreed } from "./cat-api";
 
 const select = document.querySelector('.breed-select');
 const catInfoDiv = document.querySelector('.cat-info');
-
+const loader = document.querySelector('.loader');
+const errorElement = document.querySelector('.error')
 select.addEventListener('change', onChange);
 
-function onChange(event){
-  const id = event.target.value;
-  fetchCatByBreed(id).then(res => {
-    console.log("res", res);
-    catTemplate(res.data)
+// render options in select
+fetchBreeds(select, loader, errorElement)
+  .then(res => {
+    const catList = res.data;
+    loader.classList.remove('isActive');
+    select.classList.add('show');
+    select.innerHTML = optionsCreate(catList);
   })
+  .catch(error => {
+    loader.classList.remove('isActive');
+    errorElement.classList.add('show');
+   }
+  );
+
+function onChange(event) {
+  const id = event.target.value;
+  // fetching cats
+  fetchCatByBreed(id, catInfoDiv, loader, errorElement)
+    .then(res => {
+      loader.classList.remove('isActive');
+      catInfoDiv.classList.remove('hide')
+      console.log("res", res);
+      catTemplate(res.data)
+    })
+   .catch(error => {
+     loader.classList.remove('isActive');
+     errorElement.classList.add('show');
+   }
+  );
 };
 
+// div cat-info template
 function catTemplate(catData) {
-  catData.map(({  breeds: { description, temperament, name}, url }) => {
-     catInfoDiv.innerHTML = `
-    <img src="${url}" alt="${name}">
+  const item = catData[0];
+  const { url, breeds } = item;
+  const { description, temperament, name } = breeds[0];
+
+  catInfoDiv.innerHTML = `
+    <img src="${url}" alt="${name}" width='200'>
     <p><strong>Breed:</strong> ${name}</p>
     <p><strong>Description:</strong> ${description}</p>
     <p><strong>Temperament:</strong> ${temperament}</p>
   `
-  })
- 
-   
   console.log("catData", catData);
 }
-  
-
-function fetchCatByBreed(breedId) {
-  return axios.get(`${BASE_URL}/images/search?breed_ids=${breedId}`);
-};
-
-function fetchBreeds() {
-  return axios.get(`${BASE_URL}/breeds`)
-};
-
-fetchBreeds().then(res => {
-  const catList = res.data;
- 
-  select.innerHTML = optionsCreate(catList);
-});
 
 function optionsCreate(catList) {
-  return catList.map(({id,name}) => {
+  return catList.map(({ id, name }) => {
     return (` <option value='${id}'>${name}</option> `)
   }).join('')
 };

@@ -1,0 +1,28 @@
+.loader {
+  color: blueviolet;
+  display: none;
+}
+
+.loader.isActive {
+  display: block;
+}
+
+.breed-select{
+  display: none;
+}
+
+.breed-select.show{
+  display: block;
+}
+
+.cat-info.hide{
+  display: none;
+}
+
+.error{
+  display: none;
+}
+
+.error.show {
+  display: block;
+}
