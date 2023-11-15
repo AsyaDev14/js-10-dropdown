@@ -22,13 +22,13 @@ fetchBreeds(select, loader, errorElement)
   })
   .catch(error => {
     Notify.failure('Oops! Something went wrong! Try reloading the page!');
-    // loader.classList.remove('isActive');
+    loader.classList.remove('isActive');
     errorElement.classList.add('show');
-  }
-  );
+  });
 
 function onChange(event) {
   const id = event.target.value;
+
   // fetching cats
   fetchCatByBreed(id, catInfoDiv, loader, errorElement)
     .then(res => {
@@ -42,10 +42,10 @@ function onChange(event) {
       errorElement.classList.add('show');
       Notify.failure('Oops! Something went wrong! Try reloading the page!');
     })
-  .finally(() => {
-      // loader.classList.add('isActive');
-      catInfoDiv.classList.remove('hide');
-    });
+  // .finally(() => {
+  //     loader.classList.add('isActive');
+  //     catInfoDiv.classList.remove('hide');
+  //   });
 };
 
 // div cat-info template
