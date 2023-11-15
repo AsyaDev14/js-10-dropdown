@@ -1,12 +1,12 @@
 import { fetchBreeds, fetchCatByBreed } from "./cat-api";
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
-// import SlimSelect from 'slim-select';
-
+import SlimSelect from 'slim-select';
+import 'slim-select/dist/slimselect.css'
 const select = document.querySelector('.breed-select');
 const catInfoDiv = document.querySelector('.cat-info');
 const loader = document.querySelector('.loader');
 const errorElement = document.querySelector('.error');
-// let el = document.querySelector('#selectElement')
+
 
 select.addEventListener('change', onChange);
 // render options in select
@@ -16,9 +16,10 @@ fetchBreeds(select, loader, errorElement)
     loader.classList.remove('isActive');
     select.classList.add('show');
     select.innerHTML = optionsCreate(catList);
-    // new SlimSelect({
-    //  select: el,
-    // })
+    // lib
+    new SlimSelect({
+     select: "#selectElement",
+    })
   })
   .catch(error => {
     Notify.failure('Oops! Something went wrong! Try reloading the page!');
@@ -42,10 +43,6 @@ function onChange(event) {
       errorElement.classList.add('show');
       Notify.failure('Oops! Something went wrong! Try reloading the page!');
     })
-  // .finally(() => {
-  //     loader.classList.add('isActive');
-  //     catInfoDiv.classList.remove('hide');
-  //   });
 };
 
 // div cat-info template
