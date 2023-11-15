@@ -17,12 +17,12 @@ fetchBreeds(select, loader, errorElement)
     select.classList.add('show');
     select.innerHTML = optionsCreate(catList);
     // new SlimSelect({
-    //  select: '#selectElement',
+    //  select: el,
     // })
   })
   .catch(error => {
     Notify.failure('Oops! Something went wrong! Try reloading the page!');
-    loader.classList.remove('isActive');
+    // loader.classList.remove('isActive');
     errorElement.classList.add('show');
   }
   );
@@ -41,8 +41,11 @@ function onChange(event) {
       loader.classList.remove('isActive');
       errorElement.classList.add('show');
       Notify.failure('Oops! Something went wrong! Try reloading the page!');
-    }
-    );
+    })
+  .finally(() => {
+      // loader.classList.add('isActive');
+      catInfoDiv.classList.remove('hide');
+    });
 };
 
 // div cat-info template
@@ -67,3 +70,10 @@ function optionsCreate(catList) {
     return (` <option value='${id}'>${name}</option> `)
   }).join('');
 };
+
+
+
+
+
+
+
